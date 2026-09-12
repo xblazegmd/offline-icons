@@ -1,0 +1,18 @@
+{
+	"geode": "5.10.1",
+	"gd": {
+		"win": "2.2081",
+		"android": "2.2081",
+		"mac": "2.2081",
+		"ios": "2.2081"
+	},
+	"id": "xblazegmd.offline-icons",
+	"name": "Online/Offline Icons",
+	"version": "v1.0.0",
+	"developer": "XblazeGMD",
+	"description": "",
+	"dependencies": {
+		"geode.node-ids": ">=v1.23.3",
+        "xblazegmd.geode-api": ">=v2.1.0"
+	}
+}
