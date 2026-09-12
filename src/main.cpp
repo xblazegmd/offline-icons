@@ -1,69 +1,134 @@
 #include <Geode/Geode.hpp>
+
 #include <Geode/ui/Layout.hpp>
 
 #include <Geode/modify/CharacterColorPage.hpp>
+#include <Geode/modify/GJGarageLayer.hpp>
 
 #include "IconManager.hpp"
 #include <xblazegmd.geode-api/include/XblazeAPI.hpp>
 
 using namespace geode::prelude;
 
+static bool g_offline = false;
+
 inline IconStatus statusFromBool(bool offline) {
     return offline ? IconStatus::Offline : IconStatus::Online;
 }
 
-class $modify(CCPHook, CharacterColorPage) {
-    struct Fields {
-        bool m_offline = false;
-    };
-
+class $modify(GJGLHook, GJGarageLayer) {
     bool init() {
-        if (!CharacterColorPage::init()) return false;
-        auto mainLayer = this->getChildByID("colors-layer");
-        if (!mainLayer) return true;
+        if (!GJGarageLayer::init()) return false;
+        g_offline = false;
 
-        auto buttonMenu = mainLayer->getChildByID("buttons-menu");
-        if (!buttonMenu) return true;
+        if (auto shardsMenu = this->getChildByID("shards-menu")) {
+            auto sprOff = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
+            auto sprOn = CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png");
+            sprOff->setScale(.8f);
+            sprOn->setScale(.8f);
 
-        auto container = CCMenu::create();
-        container->setID("offline-toggle"_spr);
-        container->setLayout(
-            RowLayout::create()
-                ->setAutoScale(false)
-        );
-        container->setContentWidth(90);
-        container->setAnchorPoint({0, .5f});
-        container->setPosition({30, -8});
+            auto offlineToggle = CCMenuItemToggler::create(
+                sprOff,
+                sprOn,
+                this,
+                menu_selector(GJGLHook::onOfflineToggle)
+            );
+            shardsMenu->addChild(offlineToggle);
 
-        auto sprOff = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
-        auto sprOn = CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png");
-        sprOff->setScale(.7f);
-        sprOn->setScale(.7f);
-
-        auto offlineToggle = CCMenuItemToggler::create(
-            sprOff,
-            sprOn,
-            this,
-            menu_selector(CCPHook::onOfflineToggle)
-        );
-        container->addChild(offlineToggle);
-
-        auto label = Label::create("Offline", "bigFont.fnt");
-        label->setScale(.5f);
-        container->addChild(label);
-
-        container->updateLayout();
-        buttonMenu->addChild(container);
+            shardsMenu->updateLayout();
+        }
 
         return true;
     }
 
+    void onSelect(CCObject* sender) {
+        int iconID = sender->getTag();
+        bool selected = m_selectedIconType == m_iconType && m_iconID == iconID;
+        bool unlocked = GameManager::get()->isIconUnlocked(iconID, m_selectedIconType);
+        if (selected || (!unlocked && !selected)) return;
+
+        GJGarageLayer::onSelect(sender);
+
+        if (static_cast<int>(m_iconType) > 8) return; // If > 8 it's prob smth like a death effect idc abt
+
+        auto iconman = IconManager::get();
+        auto status = statusFromBool(g_offline);
+        switch (m_iconType) {
+            case IconType::Cube:
+                iconman->setCube(m_iconID, status);
+                break;
+            case IconType::Ship:
+                iconman->setShip(m_iconID, status);
+                break;
+            case IconType::Ball:
+                iconman->setBall(m_iconID, status);
+                break;
+            case IconType::Ufo:
+                iconman->setUFO(m_iconID, status);
+                break;
+            case IconType::Wave:
+                iconman->setWave(m_iconID, status);
+                break;
+            case IconType::Robot:
+                iconman->setRobot(m_iconID, status);
+                break;
+            case IconType::Spider:
+                iconman->setSpider(m_iconID, status);
+                break;
+            case IconType::Swing:
+                iconman->setSpider(m_iconID, status);
+                break;
+            case IconType::Jetpack:
+                iconman->setJetpack(m_iconID, status);
+                break;
+            default:
+                return; // This should be unreachable cuz of the earlier check but just in case
+        }
+        iconman->saveIcons();
+    }
+
+    void onBack(CCObject* sender) {
+        IconManager::get()->updateIcons(IconStatus::Online, false);
+        GJGarageLayer::onBack(sender);
+    }
+
+    void onOfflineToggle(CCObject* sender) {
+        auto iconman = IconManager::get();
+        auto toggler = static_cast<CCMenuItemToggler*>(sender);
+        g_offline = !toggler->isOn(); // Inverted logic cuz RobTop hates us all
+
+        iconman->updateIcons(statusFromBool(g_offline), false);
+
+        m_iconID = iconman->getIcon(m_iconType, statusFromBool(g_offline));
+        m_playerObject->updatePlayerFrame(m_iconID, m_iconType);
+        this->updateCursor(m_iconID);
+        this->updatePlayerColors();
+    }
+
+    void updateCursor(int id) {
+        auto page = m_iconSelection->m_scrollLayer->m_extendedLayer->getChildByIndex(0); // Scary!
+        if (!page) return;
+
+        if (auto menu = typeinfo_cast<CCMenu*>(page->getChildByIndex(0))) {
+            auto btn = menu->getChildByTag(id);
+            if (!btn) {
+                m_cursor1->setVisible(false);
+                return;
+            }
+
+            m_cursor1->setVisible(true);
+            m_cursor1->setPosition(menu->convertToWorldSpace(btn->getPosition()));
+        }
+    }
+};
+
+class $modify(CCPHook, CharacterColorPage) {
     void onPlayerColor(CCObject* sender) {
         CharacterColorPage::onPlayerColor(sender);
         auto iconman = IconManager::get();
 
         auto colorID = sender->getTag();
-        auto status = statusFromBool(m_fields->m_offline);
+        auto status = statusFromBool(g_offline);
         switch (m_colorMode) {
             case 0:
                 iconman->setMainColor(colorID, status);
@@ -82,19 +147,8 @@ class $modify(CCPHook, CharacterColorPage) {
         CharacterColorPage::toggleGlow(sender);
         bool enabled = static_cast<CCMenuItemToggler*>(sender)->isOn();
 
-        IconManager::get()->setGlowEnabled(enabled, statusFromBool(m_fields->m_offline));
+        IconManager::get()->setGlowEnabled(enabled, statusFromBool(g_offline));
         IconManager::get()->saveIcons();
-    }
-
-    void onOfflineToggle(CCObject* sender) {
-        auto iconman = IconManager::get();
-
-        auto toggler = static_cast<CCMenuItemToggler*>(sender);
-        m_fields->m_offline = !toggler->isOn();
-
-        iconman->updateIcons(statusFromBool(m_fields->m_offline), false);
-        m_glowToggler->toggle(!iconman->isGlowEnabled(statusFromBool(m_fields->m_offline)));
-        this->updateIconColors();
     }
 };
 

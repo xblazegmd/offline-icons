@@ -156,6 +156,31 @@ void IconManager::updateIcons(IconStatus status, bool updateUserScore) {
     if (updateUserScore) GameLevelManager::get()->updateUserScore();
 }
 
+int IconManager::getIcon(IconType type, IconStatus status) const {
+    switch (type) {
+        case IconType::Cube:
+            return this->getCube(status);
+        case IconType::Ship:
+            return this->getShip(status);
+        case IconType::Ball:
+            return this->getBall(status);
+        case IconType::Ufo:
+            return this->getUFO(status);
+        case IconType::Wave:
+            return this->getWave(status);
+        case IconType::Robot:
+            return this->getRobot(status);
+        case IconType::Spider:
+            return this->getSpider(status);
+        case IconType::Swing:
+            return this->getSwing(status);
+        case IconType::Jetpack:
+            return this->getJetpack(status);
+        default:
+            return this->getCube(status);
+    }
+}
+
 int IconManager::getCube(IconStatus status) const {
     return this->getValue<int>(status, m_onlineCube, m_offlineCube);
 }

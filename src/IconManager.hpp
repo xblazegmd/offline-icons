@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Geode/Enums.hpp>
+
 enum class IconStatus {
     Online,
     Offline
@@ -14,6 +16,9 @@ public:
     void setIconsToDefault();
 
     void updateIcons(IconStatus status, bool updateUserScore = true);
+
+    /// @note Defaults to cube if `IconType` is not a gamemode
+    int getIcon(IconType type, IconStatus status) const;
 
     int getCube(IconStatus status) const;
     int getShip(IconStatus status) const;
