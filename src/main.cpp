@@ -80,7 +80,7 @@ class $modify(CCPHook, CharacterColorPage) {
 
     void toggleGlow(CCObject* sender) {
         CharacterColorPage::toggleGlow(sender);
-        bool enabled = !static_cast<CCMenuItemToggler*>(sender)->isOn();
+        bool enabled = static_cast<CCMenuItemToggler*>(sender)->isOn();
 
         IconManager::get()->setGlowEnabled(enabled, statusFromBool(m_fields->m_offline));
         IconManager::get()->saveIcons();
