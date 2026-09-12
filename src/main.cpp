@@ -1,6 +1,5 @@
 #include <Geode/Geode.hpp>
-#include <Geode/binding/GameManager.hpp>
-#include <Geode/binding/GameLevelManager.hpp>
+#include <Geode/ui/Layout.hpp>
 
 #include <Geode/modify/CharacterColorPage.hpp>
 
@@ -26,14 +25,35 @@ class $modify(CCPHook, CharacterColorPage) {
         auto buttonMenu = mainLayer->getChildByID("buttons-menu");
         if (!buttonMenu) return true;
 
+        auto container = CCMenu::create();
+        container->setID("offline-toggle"_spr);
+        container->setLayout(
+            RowLayout::create()
+                ->setAutoScale(false)
+        );
+        container->setContentWidth(90);
+        container->setAnchorPoint({0, .5f});
+        container->setPosition({30, -8});
+
+        auto sprOff = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
+        auto sprOn = CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png");
+        sprOff->setScale(.7f);
+        sprOn->setScale(.7f);
+
         auto offlineToggle = CCMenuItemToggler::create(
-            CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png"),
-            CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png"),
+            sprOff,
+            sprOn,
             this,
             menu_selector(CCPHook::onOfflineToggle)
         );
-        offlineToggle->setPosition({30, 0});
-        buttonMenu->addChild(offlineToggle);
+        container->addChild(offlineToggle);
+
+        auto label = Label::create("Offline", "bigFont.fnt");
+        label->setScale(.5f);
+        container->addChild(label);
+
+        container->updateLayout();
+        buttonMenu->addChild(container);
 
         return true;
     }
