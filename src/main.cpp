@@ -39,6 +39,7 @@ class $modify(GJGLHook, GJGarageLayer) {
                 this,
                 menu_selector(GJGLHook::onOfflineToggle)
             );
+            m_fields->m_toggler->setID("icon-toggler"_spr);
             shardsMenu->addChild(m_fields->m_toggler);
             shardsMenu->updateLayout();
         }
@@ -57,7 +58,7 @@ class $modify(GJGLHook, GJGarageLayer) {
         m_fields->m_offlineOverlay->setScaleX((winSize.width + 10.f) / overlaySize.width);
         m_fields->m_offlineOverlay->setScaleY((winSize.height + 10.f) / overlaySize.height);
         m_fields->m_offlineOverlay->setPosition({ -5.f, -5.f });
-        m_fields->m_offlineOverlay->setZOrder(10000);
+        m_fields->m_offlineOverlay->setZOrder(1000);
 
         this->addChild(m_fields->m_offlineOverlay);
 
@@ -148,6 +149,11 @@ $on_game(Loaded) {
     auto iconman = IconManager::get();
     if (!Mod::get()->setSavedValue("loaded", true)) {
         iconman->setIconsToDefault();
+        FLAlertLayer::create(
+            "Offline Icons",
+            "Thank you for using this mod! You can customize your offline icon set in the <cy>Icon Kit</c>",
+            "OK"
+        )->show();
     } else {
         iconman->loadIcons();
         iconman->updateIcons(IconStatus::Online);
