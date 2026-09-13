@@ -7,7 +7,7 @@ Set a custom icon set for when you're offline!
 ## How to use
 You can customize your offline icon set in the _Icon Kit_. In the left of the Icon Kit, there should be a button that looks something like this:
 
-<img src="resources/buttonExample.png" width="100" alt="The Button in Question"
+<img src="resources/buttonExample.png" width="100" alt="The Button in Question" />
 
 Click that button to customize your offline icon set, and click it again to customize your normal icons
 
