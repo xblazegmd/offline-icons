@@ -18,7 +18,7 @@ inline IconStatus statusFromBool(bool offline) {
 
 class $modify(GJGLHook, GJGarageLayer) {
     struct Fields {
-        CCLayerColor* m_offlineOverlay;
+        CCSprite* m_offlineOverlay;
     };
 
     bool init() {
@@ -44,9 +44,21 @@ class $modify(GJGLHook, GJGarageLayer) {
         }
 
         // Overlay (if offline icons)
-        m_fields->m_offlineOverlay = CCLayerColor::create({0, 1, 31, 100});
+        m_fields->m_offlineOverlay = CCSprite::create("offlineOverlay.png"_spr);
+        m_fields->m_offlineOverlay->setID("offline-overlay"_spr);
+
+        m_fields->m_offlineOverlay->setOpacity(100);
         m_fields->m_offlineOverlay->setVisible(false);
-        m_fields->m_offlineOverlay->setZOrder(1000);
+
+        auto winSize = CCDirector::get()->getWinSize();
+        auto overlaySize = m_fields->m_offlineOverlay->getTextureRect().size;
+
+        m_fields->m_offlineOverlay->setAnchorPoint({0, 0});
+        m_fields->m_offlineOverlay->setScaleX((winSize.width + 10.f) / overlaySize.width);
+        m_fields->m_offlineOverlay->setScaleY((winSize.height + 10.f) / overlaySize.height);
+        m_fields->m_offlineOverlay->setPosition({ -5.f, -5.f });
+        m_fields->m_offlineOverlay->setZOrder(10000);
+
         this->addChild(m_fields->m_offlineOverlay);
 
         return true;
