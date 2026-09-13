@@ -18,6 +18,7 @@ inline IconStatus statusFromBool(bool offline) {
 
 class $modify(GJGLHook, GJGarageLayer) {
     struct Fields {
+        CCMenuItemToggler* m_toggler;
         CCSprite* m_offlineOverlay;
     };
 
@@ -32,14 +33,13 @@ class $modify(GJGLHook, GJGarageLayer) {
             sprOff->setScale(.5f);
             sprOn->setScale(.5f);
 
-            auto offlineToggle = CCMenuItemToggler::create(
+            m_fields->m_toggler = CCMenuItemToggler::create(
                 sprOff,
                 sprOn,
                 this,
                 menu_selector(GJGLHook::onOfflineToggle)
             );
-            shardsMenu->addChild(offlineToggle);
-
+            shardsMenu->addChild(m_fields->m_toggler);
             shardsMenu->updateLayout();
         }
 
@@ -84,10 +84,9 @@ class $modify(GJGLHook, GJGarageLayer) {
         GJGarageLayer::onBack(sender);
     }
 
-    void onOfflineToggle(CCObject* sender) {
+    void onOfflineToggle(CCObject*) {
         auto iconman = IconManager::get();
-        auto toggler = static_cast<CCMenuItemToggler*>(sender);
-        g_offline = !toggler->isOn(); // Inverted logic cuz RobTop hates us all
+        g_offline = !m_fields->m_toggler->isOn(); // Inverted logic cuz RobTop hates us all
 
         iconman->updateIcons(statusFromBool(g_offline), false);
 
