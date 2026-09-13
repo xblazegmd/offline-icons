@@ -14,5 +14,8 @@
 	"dependencies": {
 		"geode.node-ids": ">=v1.23.3",
         "xblazegmd.geode-api": ">=v2.1.0"
-	}
+	},
+    "resources": {
+        "sprites": ["resources/*.png"]
+    }
 }

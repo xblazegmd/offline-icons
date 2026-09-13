@@ -22,10 +22,10 @@ class $modify(GJGLHook, GJGarageLayer) {
         g_offline = false;
 
         if (auto shardsMenu = this->getChildByID("shards-menu")) {
-            auto sprOff = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
-            auto sprOn = CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png");
-            sprOff->setScale(.8f);
-            sprOn->setScale(.8f);
+            auto sprOff = CCSprite::create("circleBtn_night.png"_spr);
+            auto sprOn = CCSprite::create("circleBtn_day.png"_spr);
+            sprOff->setScale(.5f);
+            sprOn->setScale(.5f);
 
             auto offlineToggle = CCMenuItemToggler::create(
                 sprOff,
