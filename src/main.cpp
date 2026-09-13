@@ -75,38 +75,7 @@ class $modify(GJGLHook, GJGarageLayer) {
         if (static_cast<int>(m_iconType) > 8) return; // If > 8 it's prob smth like a death effect idc abt
 
         auto iconman = IconManager::get();
-        auto status = statusFromBool(g_offline);
-        switch (m_iconType) {
-            case IconType::Cube:
-                iconman->setCube(m_iconID, status);
-                break;
-            case IconType::Ship:
-                iconman->setShip(m_iconID, status);
-                break;
-            case IconType::Ball:
-                iconman->setBall(m_iconID, status);
-                break;
-            case IconType::Ufo:
-                iconman->setUFO(m_iconID, status);
-                break;
-            case IconType::Wave:
-                iconman->setWave(m_iconID, status);
-                break;
-            case IconType::Robot:
-                iconman->setRobot(m_iconID, status);
-                break;
-            case IconType::Spider:
-                iconman->setSpider(m_iconID, status);
-                break;
-            case IconType::Swing:
-                iconman->setSpider(m_iconID, status);
-                break;
-            case IconType::Jetpack:
-                iconman->setJetpack(m_iconID, status);
-                break;
-            default:
-                return; // This should be unreachable cuz of the earlier check but just in case
-        }
+        iconman->setIcon(m_iconID, m_iconType, statusFromBool(g_offline));
         iconman->saveIcons();
     }
 

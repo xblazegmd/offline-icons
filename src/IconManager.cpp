@@ -159,114 +159,55 @@ void IconManager::updateIcons(IconStatus status, bool updateUserScore) {
 int IconManager::getIcon(IconType type, IconStatus status) const {
     switch (type) {
         case IconType::Cube:
-            return this->getCube(status);
+            return this->getValue<int>(status, m_onlineCube, m_offlineCube);
         case IconType::Ship:
-            return this->getShip(status);
+            return this->getValue<int>(status, m_onlineShip, m_offlineShip);
         case IconType::Ball:
-            return this->getBall(status);
+            return this->getValue<int>(status, m_onlineBall, m_offlineBall);
         case IconType::Ufo:
-            return this->getUFO(status);
+            return this->getValue<int>(status, m_onlineUFO, m_offlineUFO);
         case IconType::Wave:
-            return this->getWave(status);
+            return this->getValue<int>(status, m_onlineWave, m_offlineWave);
         case IconType::Robot:
-            return this->getRobot(status);
+            return this->getValue<int>(status, m_onlineRobot, m_offlineRobot);
         case IconType::Spider:
-            return this->getSpider(status);
+            return this->getValue<int>(status, m_onlineSpider, m_offlineSpider);
         case IconType::Swing:
-            return this->getSwing(status);
+            return this->getValue<int>(status, m_onlineSwing, m_offlineSwing);
         case IconType::Jetpack:
-            return this->getJetpack(status);
+            return this->getValue<int>(status, m_onlineJetpack, m_offlineJetpack);
         default:
-            return this->getCube(status);
+            return this->getValue<int>(status, m_onlineCube, m_offlineCube);
     }
-}
-
-int IconManager::getCube(IconStatus status) const {
-    return this->getValue<int>(status, m_onlineCube, m_offlineCube);
-}
-
-int IconManager::getShip(IconStatus status) const {
-    return this->getValue<int>(status, m_onlineShip, m_offlineShip);
-}
-
-int IconManager::getBall(IconStatus status) const {
-    return this->getValue<int>(status, m_onlineBall, m_offlineBall);
-}
-
-int IconManager::getUFO(IconStatus status) const {
-    return this->getValue<int>(status, m_onlineUFO, m_offlineUFO);
-}
-
-int IconManager::getWave(IconStatus status) const {
-    return this->getValue<int>(status, m_onlineWave, m_offlineWave);
-}
-
-int IconManager::getRobot(IconStatus status) const {
-    return this->getValue<int>(status, m_onlineRobot, m_offlineRobot);
-}
-
-int IconManager::getSpider(IconStatus status) const {
-    return this->getValue<int>(status, m_onlineSpider, m_offlineSpider);
-}
-
-int IconManager::getSwing(IconStatus status) const {
-    return this->getValue<int>(status, m_onlineSwing, m_offlineSwing);
-}
-
-int IconManager::getJetpack(IconStatus status) const {
-    return this->getValue<int>(status, m_onlineJetpack, m_offlineJetpack);
-}
-
-int IconManager::getMainColor(IconStatus status) const {
-    return this->getValue<int>(status, m_onlineColor1, m_offlineColor1);
-}
-
-int IconManager::getSecondaryColor(IconStatus status) const {
-    return this->getValue<int>(status, m_onlineColor2, m_offlineColor2);
-}
-
-int IconManager::getGlowColor(IconStatus status) const {
-    return this->getValue<int>(status, m_onlineGlowColor, m_offlineGlowColor);
 }
 
 bool IconManager::isGlowEnabled(IconStatus status) const {
     return this->getValue<bool>(status, m_onlineGlow, m_offlineGlow);
 }
 
-void IconManager::setCube(int id, IconStatus status) {
-    this->setValue<int>(id, status, m_onlineCube, m_offlineCube);
-}
-
-void IconManager::setShip(int id, IconStatus status) {
-    this->setValue<int>(id, status, m_onlineShip, m_offlineShip);
-}
-
-void IconManager::setBall(int id, IconStatus status) {
-    this->setValue<int>(id, status, m_onlineBall, m_offlineBall);
-}
-
-void IconManager::setUFO(int id, IconStatus status) {
-    this->setValue<int>(id, status, m_onlineUFO, m_offlineUFO);
-}
-
-void IconManager::setWave(int id, IconStatus status) {
-    this->setValue<int>(id, status, m_onlineWave, m_offlineWave);
-}
-
-void IconManager::setRobot(int id, IconStatus status) {
-    this->setValue<int>(id, status, m_onlineRobot, m_offlineRobot);
-}
-
-void IconManager::setSpider(int id, IconStatus status) {
-    this->setValue<int>(id, status, m_onlineSpider, m_offlineSpider);
-}
-
-void IconManager::setSwing(int id, IconStatus status) {
-    this->setValue<int>(id, status, m_onlineSwing, m_offlineSwing);
-}
-
-void IconManager::setJetpack(int id, IconStatus status) {
-    this->setValue<int>(id, status, m_onlineJetpack, m_offlineJetpack);
+void IconManager::setIcon(int id, IconType type, IconStatus status) {
+    switch (type) {
+        case IconType::Cube:
+            this->setValue<int>(id, status, m_onlineCube, m_offlineCube);
+        case IconType::Ship:
+            this->setValue<int>(id, status, m_onlineShip, m_offlineShip);
+        case IconType::Ball:
+            this->setValue<int>(id, status, m_onlineBall, m_offlineBall);
+        case IconType::Ufo:
+            this->setValue<int>(id, status, m_onlineUFO, m_offlineUFO);
+        case IconType::Wave:
+            this->setValue<int>(id, status, m_onlineWave, m_offlineWave);
+        case IconType::Robot:
+            this->setValue<int>(id, status, m_onlineRobot, m_offlineRobot);
+        case IconType::Spider:
+            this->setValue<int>(id, status, m_onlineSpider, m_offlineSpider);
+        case IconType::Swing:
+            this->setValue<int>(id, status, m_onlineSwing, m_offlineSwing);
+        case IconType::Jetpack:
+            this->setValue<int>(id, status, m_onlineJetpack, m_offlineJetpack);
+        default:
+            return;
+    }
 }
 
 void IconManager::setMainColor(int id, IconStatus status) {

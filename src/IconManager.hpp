@@ -17,33 +17,16 @@ public:
 
     void updateIcons(IconStatus status, bool updateUserScore = true);
 
-    /// @note Defaults to cube if `IconType` is not a gamemode
+    /// @note Defaults to cube if `type` is not a gamemode
     int getIcon(IconType type, IconStatus status) const;
-
-    int getCube(IconStatus status) const;
-    int getShip(IconStatus status) const;
-    int getBall(IconStatus status) const;
-    int getUFO(IconStatus status) const;
-    int getWave(IconStatus status) const;
-    int getRobot(IconStatus status) const;
-    int getSpider(IconStatus status) const;
-    int getSwing(IconStatus status) const;
-    int getJetpack(IconStatus status) const;
 
     int getMainColor(IconStatus status) const;
     int getSecondaryColor(IconStatus status) const;
     int getGlowColor(IconStatus status) const;
     bool isGlowEnabled(IconStatus status) const;
 
-    void setCube(int id, IconStatus status);
-    void setShip(int id, IconStatus status);
-    void setBall(int id, IconStatus status);
-    void setUFO(int id, IconStatus status);
-    void setWave(int id, IconStatus status);
-    void setRobot(int id, IconStatus status);
-    void setSpider(int id, IconStatus status);
-    void setSwing(int id, IconStatus status);
-    void setJetpack(int id, IconStatus status);
+    /// @note Does not do anything if `type` is not a gamemode
+    void setIcon(int id, IconType type, IconStatus status);
 
     void setMainColor(int id, IconStatus status);
     void setSecondaryColor(int id, IconStatus status);
