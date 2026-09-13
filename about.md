@@ -1,4 +1,19 @@
 # Offline Icons
-Ever wanted to have a custom icon set for when you're offline? Well, with this mod, now you can!
+Set a custom icon set for when you're offline!
 
-You can now customize your offline icons/colors in the Icon Kit!
+# WARNING
+Compatibility with the following mods has not yet been tested, and will most likely end with <cr>breaks</c>:
+
+<mod:weebify.separate_dual_icons>
+
+## How to use
+You can customize your offline icon set in the _Icon Kit_. In the left of the Icon Kit, there should be a button that looks something like this:
+
+![The Button in Question](xblazegmd.offline-icons/buttonExample.png?scale:0,8)
+
+Click that button to customize your offline icon set, and click it again to customize your normal icons
+
+## Why?
+I've seen some people set custom icon sets to indicate they're offline (heck, I myself did for a little while!). But it's pretty annoying having to remember to set your offline set every single time you go offline. This mod aims to fix that problem, making offline icon sets much more easier to set up
+
+_made entirely in [neovim](https://neovim.io/) btw_
