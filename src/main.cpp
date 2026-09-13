@@ -17,10 +17,15 @@ inline IconStatus statusFromBool(bool offline) {
 }
 
 class $modify(GJGLHook, GJGarageLayer) {
+    struct Fields {
+        CCLayerColor* m_offlineOverlay;
+    };
+
     bool init() {
         if (!GJGarageLayer::init()) return false;
         g_offline = false;
 
+        // Toggler
         if (auto shardsMenu = this->getChildByID("shards-menu")) {
             auto sprOff = CCSprite::create("circleBtn_night.png"_spr);
             auto sprOn = CCSprite::create("circleBtn_day.png"_spr);
@@ -37,6 +42,12 @@ class $modify(GJGLHook, GJGarageLayer) {
 
             shardsMenu->updateLayout();
         }
+
+        // Overlay (if offline icons)
+        m_fields->m_offlineOverlay = CCLayerColor::create({0, 1, 31, 100});
+        m_fields->m_offlineOverlay->setVisible(false);
+        m_fields->m_offlineOverlay->setZOrder(1000);
+        this->addChild(m_fields->m_offlineOverlay);
 
         return true;
     }
@@ -101,6 +112,7 @@ class $modify(GJGLHook, GJGarageLayer) {
 
         m_iconID = iconman->getIcon(m_iconType, statusFromBool(g_offline));
         m_playerObject->updatePlayerFrame(m_iconID, m_iconType);
+        m_fields->m_offlineOverlay->setVisible(g_offline);
         this->updateCursor(m_iconID);
         this->updatePlayerColors();
     }
